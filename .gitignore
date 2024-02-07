@@ -1,0 +1,7 @@
+*__pycache__/*
+*/__pycache__/*
+data/runs/lsr
+data/runs/main
+data/runs/rerank
+archive
+experiments/lsr
