@@ -253,3 +253,17 @@ def prepare_qrels(qrels_path):
     new_column_names = {'query-id': 'qid', 'corpus-id': 'docno', 'score': 'label'}
     df = df.rename(columns=new_column_names)
     return df
+
+
+
+def save_dataframe(df, save_file, start=0):
+    batch_size = 10000
+    length = len(df)
+    while start < length:
+        df_batch = df[start:min(start+batch_size, length)]
+        with open(save_file, 'a') as file:
+            for _, row in df_batch.iterrows():
+                json_line = row.to_json()  # Convert the row to JSON
+                file.write(json_line + '\n')  # Write the JSON line to the file
+        start += batch_size
+

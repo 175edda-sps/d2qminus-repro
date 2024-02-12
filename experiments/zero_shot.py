@@ -139,8 +139,6 @@ def main():
     parser.add_argument("--N",  default=20, type=int, required=False, help="Number of expansion queries per document in the scored file")
     parser.add_argument("--percentages", metavar='N', type=int, nargs='+', default=[30, 50], required=False, help="a list of percentages to experiment with")
     args = parser.parse_args()
-
-    args = parser.parse_args()
     scored_file = args.scored_file
     index_dir = args.index_dir
     eval_dir = args.eval_dir
@@ -154,18 +152,6 @@ def main():
     queries = args.queries
     N = args.N
 
-    # print(f' scored_file = {scored_file}')
-    # print(f' index_dir = {index_dir}')
-    # print(f' eval_dir = {eval_dir}')
-    # print(f' runs_dir = {runs_dir}')
-    # print(f' dataset = {dataset}')
-    # print(f' pt_name = {pt_name}')
-    # print(f' filter_type = {filter_type}')
-    # print(f' percentages = {percentages}')
-    # print(f' N = {N}')
-    # print(f' query_column = {query_column}')
-    # print(f' qrels = {qrels}')
-    # print(f' queries = {queries}')
     if filter_type != 'top' and filter_type != 'bottom':
         raise ValueError('Filter type value must be either top or bottom')
 

@@ -79,3 +79,19 @@ Please see the `experiments/rl/` directory for more information.
 
 ## 5. LSR Experiments
 Please see the `experiments/lsr/` directory for more information.
+
+## 6. Reranking Experiment
+Please see the `experiments/raranking/` directory for more information.
+
+
+## Utility 
+To generate filtered file out of a scored file (without the scores or evaluating the filtered file) of any dataset, you can run the following command:
+
+```
+python experiments/filter.py --scored_file "path_to_the_scored_file.jsonl" \
+                        --filtered_file "path_to_save_the_filtered_file" \
+                        --filter_type 'top' \
+                        --percentages 30 \
+                        --N 80 \
+```
+

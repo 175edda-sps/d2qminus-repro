@@ -97,18 +97,6 @@ def join_queries(queries):
     return " mx12e34m ".join(queries)
 
 
-def save_dataframe(df, save_file, start=0):
-    batch_size = 10000
-    length = len(df)
-    while start < length:
-        df_batch = df[start:min(start+batch_size, length)]
-        with open(save_file, 'a') as file:
-            for _, row in df_batch.iterrows():
-                json_line = row.to_json()  # Convert the row to JSON
-                file.write(json_line + '\n')  # Write the JSON line to the file
-        start += batch_size
-
-
 
 def process(input_file, save_file, logger):
 
@@ -124,7 +112,7 @@ def process(input_file, save_file, logger):
     # df.drop(['queries_joined', 'predicted_queries'], axis=1, inplace=True)
     df.drop(['queries_joined',], axis=1, inplace=True)
 
-    save_dataframe(df, save_file,)
+    util.save_dataframe(df, save_file,)
     # df.to_json(save_file, orient='records', lines=True)
     logger.info("Done Saving the file")
 
