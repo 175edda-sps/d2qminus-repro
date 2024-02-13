@@ -25,7 +25,6 @@ porter2 = SnowballStemmer(language='english')  # porter2 is the default in Pisa 
 terrier_stopwords = autoclass("org.terrier.terms.Stopwords")(None) # terrier_stopwords is the default in Pisa Indexer 
 
 
-
 def en_stem(text, stemmer=porter2):
     # # Tokenize the input string into words
     # words = nltk.word_tokenize(text)
@@ -92,51 +91,3 @@ def preprocess_list(text_list):
     return [preprocess(text) for text in text_list]
 
 
-        
-def join_queries(queries):
-    return " mx12e34m ".join(queries)
-
-
-
-def process(input_file, save_file, logger):
-
-    df = pd.read_json(input_file, lines=True,)
-    logger.info(f"Loaded the document with expansion queries file from this path {input_file}")
-
-
-    df['queries_joined'] = df["predicted_queries"].apply(join_queries)
-    logger.info("Done with joining each document queries into one string")
-
-    df['queries_processed'] = df['queries_joined'].apply(preprocess)
-    logger.info("Done with processing the query terms ")
-    # df.drop(['queries_joined', 'predicted_queries'], axis=1, inplace=True)
-    df.drop(['queries_joined',], axis=1, inplace=True)
-
-    util.save_dataframe(df, save_file,)
-    # df.to_json(save_file, orient='records', lines=True)
-    logger.info("Done Saving the file")
-
-
-
-
-def main():
-
-    parser = argparse.ArgumentParser(description="Preprocessing expansion queries")
-    parser.add_argument("--input", type=str, required=True, help="Path to the input data file")
-    parser.add_argument("--log", type=str, required=True, help="Path to the log file")
-    parser.add_argument("--output", type=str, required=True, help="Path to the save the output file")
-    args = parser.parse_args()
-    log_file = args.log
-    input = args.input
-    output = args.output
-    
-    logger = util.get_logger(log_file)
-    logger.info(f"The log file is saved into : {log_file}")
-    logger.info(f"The output file is saved into : {output}")
-    logger.info(f"The input file is saved into : {input}")
-
-    process(input, output, logger,)
-
-
-if __name__ == "__main__":
-    main()

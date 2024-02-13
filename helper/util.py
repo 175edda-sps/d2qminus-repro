@@ -115,17 +115,17 @@ def join_text_and_queries(text, queries):
 def join_two_texts(text1, text2):
     return text1 + ' \n ' + text2
 
-def get_filtered_data(df, threshold, filter_function, add_text=False):
+def get_filtered_data(df, threshold, filter_function, add_text=False, exp_query_column='predicted_queries'):
     # Apply the custom function to 'column1' while passing 'column2' values as a parameter
 
     df_filtered = pd.DataFrame()
     df_filtered['docno'] = df['id'].astype('str')
     if add_text:
         df_filtered['text'] = df.apply(
-            lambda row: filter_function(row['predicted_queries'], row['querygen_score'], threshold, row['text']), axis=1)
+            lambda row: filter_function(row[exp_query_column], row['querygen_score'], threshold, row['text']), axis=1)
     else:
-        df_filtered['predicted_queries'] = df.apply(
-            lambda row: filter_function(row['predicted_queries'], row['querygen_score'], threshold), axis=1)
+        df_filtered[exp_query_column] = df.apply(
+            lambda row: filter_function(row[exp_query_column], row['querygen_score'], threshold), axis=1)
         df_filtered['text'] = df['text'].astype('str')
     return df_filtered
 

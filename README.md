@@ -8,7 +8,7 @@ This repo contains the code and data used in our reproducibility study of [doc2q
 Before replicating the work, you need to create a conda environment, activate it, and then install the needed libraries. Run the following commands:
 
 ```
-conda create --name doc2query python=3.8 -c pytorch faiss-gpu=1.6.5 -c conda-forge openjdk -c conda-forge trec_eval
+conda create --name doc2query  -c pytorch -c conda-forge -c nvidia python=3.8.17 pytorch==2.0.1 pytorch-cuda=11.8 faiss-gpu=1.6.5  trec_eval=9.0.8 openjdk=11.0.22
 conda activate doc2query
 pip install -r requirements.txt
 pip install git+https://github.com/terrierteam/pyterrier_doc2query.git

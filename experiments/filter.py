@@ -23,12 +23,14 @@ def process(scored_file, filtered_files, filter_type="top", percentages=[30], N=
     '''
     
 
-    df_scored = None
     if filter_type == 'top':
         filter_function = util.keep_high
     elif filter_type == 'bottom':
         filter_function = util.keep_bottom
  
+    # read input file and compute thresholds for once only
+    df_scored = pd.read_json(scored_file, lines=True, dtype={'id': str,}) 
+    percentiles = util.compute_percentiles(df_scored['querygen_score'].values)
 
     for percentage, filtered_file in zip(percentages, filtered_files):
 
@@ -45,11 +47,6 @@ def process(scored_file, filtered_files, filter_type="top", percentages=[30], N=
             keep_percentage = percentage
 
         logger.info(f"Processing {filter_type} {percentage}")
-
-        if df_scored is None: # read input file and compute thresholds for once only
-            df_scored = pd.read_json(scored_file, lines=True, dtype={'id': str,}) 
-            percentiles = util.compute_percentiles(df_scored['querygen_score'].values)
-
         threshold = percentiles[f'p_{keep_percentage}']
         df_filtered = util.get_filtered_data(df=df_scored, threshold=threshold, 
                                         filter_function=filter_function, add_text=False)

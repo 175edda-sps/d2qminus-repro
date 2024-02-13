@@ -1,7 +1,6 @@
 pandas==2.0.3
 numpy==1.24.4
 transformers==4.31.0
-torch==2.0.1+cu117
 sentence-transformers==2.2.2
 sentencepiece==0.1.99
 chardet==5.2.0
@@ -12,3 +11,5 @@ pyterrier_pisa==0.0.6
 latex==0.7.0
 GitPython==3.1.32
 npids==0.0.2
+trl==0.7.4
+
