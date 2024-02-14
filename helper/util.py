@@ -135,7 +135,7 @@ def compute_percentiles(query_scores_column):
     query_scores = np.concatenate(query_scores_column)
     ps = np.arange(5, 100, 5).tolist()
     for p in ps:
-        percentiles.update({f"p_{100 - p}": round(np.percentile(query_scores, p), 4)})
+        percentiles.update({f"p_{p}": round(np.percentile(query_scores, p), 4)})
     return percentiles
 
 
@@ -160,47 +160,11 @@ def keep_bottom(queries, scores, threshold, text=""):
         return ' '.join(np.array(queries)[np.array(scores) < threshold].tolist())
 
 
-def keep_high(queries, scores, threshold, text=""):
+def keep_top(queries, scores, threshold, text=""):
     if text != "": # means make text + filtered queries 
         return text + ' \n ' + ' \n '.join(np.array(queries)[np.array(scores) >= threshold].tolist()) 
     else: # just returns the filtered queries 
         return ' '.join(np.array(queries)[np.array(scores) >= threshold].tolist())
-
-
-def keep_top_and_bottom(queries, scores, top_threshold, lowest_threshold, text=""):
-    lowest_queries = ' \n '.join(np.array(queries)[np.array(scores) < lowest_threshold].tolist()) 
-    top_queries = ' \n '.join(np.array(queries)[np.array(scores) >= top_threshold].tolist()) 
-    if text != "": # means make text + filtered queries in one field
-        return text + ' \n ' + lowest_queries + ' \n\n\n ' + top_queries
-    else: # just returns the filtered queries 
-        return ' \n ' + lowest_queries + ' \n\n\n ' + top_queries
-    
-def get_repeated_terms(doc_unique_terms, queries, split_word="mz123mz", return_joined=False):
-    if queries == "":
-        return []
-    # queries = " ".join(queries.split(split_word))
-    queries = " ".join(queries)
-    queries = queries.split()
-    q_terms_arr = np.array(queries)
-    res_terms = q_terms_arr[np.isin(q_terms_arr, np.array(doc_unique_terms))].tolist()
-    if return_joined:
-        return " \n ".join(res_terms)
-    else:
-        return res_terms
-
-
-def get_new_terms(doc_unique_terms, queries, split_word="mz123mz", return_joined=False):
-    if queries == "":
-        return []
-    # queries = " ".join(queries.split(split_word))
-    queries = " ".join(queries)
-    queries = queries.split()
-    q_terms_arr = np.array(queries)
-    res_terms = q_terms_arr[np.isin(q_terms_arr, np.array(doc_unique_terms), invert=True)].tolist()
-    if return_joined:
-        return " \n ".join(res_terms)
-    else:
-        return res_terms
 
 
 def prepare_d2q_for_indexing(df):
@@ -267,3 +231,40 @@ def save_dataframe(df, save_file, start=0):
                 file.write(json_line + '\n')  # Write the JSON line to the file
         start += batch_size
 
+
+def get_terms(queries, split_word=""):
+    '''
+    queries should be string, but if a list was passed it will be converted to a joined strig first
+    '''
+    if len(queries) == 0:
+        return []
+
+    if type(queries) is list:
+        queries = ' '.join(queries)
+        
+    q_terms = queries.split() # convert the queries to terms
+    q_terms_arr = np.array(list(filter(None, q_terms))) # remove empty strings
+    return  q_terms_arr
+
+
+def get_new_terms(doc_unique_terms, queries, return_joined=False):
+    
+    q_terms_arr = get_terms(queries)
+    if len(q_terms_arr) == 0:
+        return []
+    res_terms = q_terms_arr[np.isin(q_terms_arr, np.array(doc_unique_terms), invert=True)].tolist()
+    if return_joined:
+        return " \n ".join(res_terms)
+    else:
+        return res_terms
+    
+def get_repeated_terms(doc_unique_terms, queries, return_joined=False):
+    
+    q_terms_arr = get_terms(queries)
+    if len(q_terms_arr) == 0:
+        return []
+    res_terms = q_terms_arr[np.isin(q_terms_arr, np.array(doc_unique_terms))].tolist()
+    if return_joined:
+        return " \n ".join(res_terms)
+    else:
+        return res_terms

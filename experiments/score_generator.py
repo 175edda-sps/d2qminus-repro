@@ -60,12 +60,7 @@ def process(input_file, output_file, logger, start=0):
     '''
 
     scorer = QueryScorer(ElectraScorer('crystina-z/monoELECTRA_LCE_nneg31'))
-    column_types = {
-        'id': str,
-        'text': str,
-        'predicted_queries': str
-    }
-    df_col = pd.read_json(input_file, lines=True) #names=['id', 'text', 'predicted_queries'], dtype=column_types,
+    df_col = pd.read_json(input_file, lines=True, dtype={'id': str,}, )
     total_steps = len(df_col)
     batch_size = 256
     batch = []

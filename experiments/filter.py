@@ -24,7 +24,7 @@ def process(scored_file, filtered_files, filter_type="top", percentages=[30], N=
     
 
     if filter_type == 'top':
-        filter_function = util.keep_high
+        filter_function = util.keep_top
     elif filter_type == 'bottom':
         filter_function = util.keep_bottom
  

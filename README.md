@@ -11,8 +11,9 @@ Before replicating the work, you need to create a conda environment, activate it
 conda create --name doc2query  -c pytorch -c conda-forge -c nvidia python=3.8.17 pytorch==2.0.1 pytorch-cuda=11.8 faiss-gpu=1.6.5  trec_eval=9.0.8 openjdk=11.0.22
 conda activate doc2query
 pip install -r requirements.txt
-pip install git+https://github.com/terrierteam/pyterrier_doc2query.git
 pip install git+https://github.com/terrierteam/pyterrier_dr.git
+
+pip install git+https://github.com/terrierteam/pyterrier_doc2query.git
 pip install git+https://github.com/terrierteam/pyterrier_t5.git
 ```
 

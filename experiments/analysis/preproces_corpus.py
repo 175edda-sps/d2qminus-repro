@@ -33,10 +33,9 @@ def get_unique_terms(text):
     return unique_terms
 
 
-
 def preprocess_corpus(input_file, save_file, logger):
 
-    df = pd.read_json(input_file, lines=True, nrows=100000)
+    df = pd.read_json(input_file, lines=True,)
     logger.info(f"Loaded the document with expansion queries file from this path {input_file}")
 
     cnt = 0
@@ -54,6 +53,8 @@ def preprocess_corpus(input_file, save_file, logger):
         cnt += 1
         if cnt % 10000 == 0:
             logger.info(f"Processed {cnt} so far out of {len(df)}")
+
+    logger.info(f"Done processing the whole corpus")
 
 
 

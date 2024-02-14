@@ -36,7 +36,7 @@ def process(scored_file, index_dir, eval_dir, runs_dir, N = 80,
     logger = util.get_logger(log_file)
 
     if filter_type == 'top':
-        filter_function = util.keep_high
+        filter_function = util.keep_top
     elif filter_type == 'bottom':
         filter_function = util.keep_bottom
  

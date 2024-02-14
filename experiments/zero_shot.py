@@ -73,7 +73,7 @@ def index_evaluate(index_dir, eval_dir, runs_dir, dataset, pt_dataset_name, scor
         build_index(df_d2q, d2q_index, logger)
 
         # build doc2query-- indexes
-        filter_function = util.keep_high if filter_type == 'top' else util.keep_bottom
+        filter_function = util.keep_top if filter_type == 'top' else util.keep_bottom
         for percentage in percentages:
             # compute the thresholds for  top X
             filter_name = f'd2q_N{N}_{filter_type}_{percentage}' # f (Filtered)

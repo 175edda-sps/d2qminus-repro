@@ -159,7 +159,6 @@ def form_BM25_evaluation_row(df_res, test_set='', name='BM25', b=None, k=None):
             "R@10": df_res[str("R@10")].values[0],
             "R@100": df_res[str("R@100")].values[0],
             "R@1000": df_res[str("R@1000")].values[0],
-            'run': run,
             }
 
 
