@@ -95,7 +95,7 @@ def process(scored_file, index_dir, eval_dir, runs_dir, N = 80,
 
         df_res['N'] = [N] * len(df_res)
         df_res[f'{filter_type}'] = [percentage] * len(df_res)
-        logger.info(df_res)
+        logger.info(df_res.to_string())
         df_ans = pd.concat([df_ans, df_res], ignore_index=True)
         df_ans.to_excel(all_eval_file, index=False)
 

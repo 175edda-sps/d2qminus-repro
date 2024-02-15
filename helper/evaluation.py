@@ -27,13 +27,11 @@ eval_trec  = cf.eval_trec
 
 
 def get_test_sets_and_measures():
-    return  [
-            ('irds:msmarco-passage/dev/small', RR@10),
-            ('irds:msmarco-passage/dev/2', RR@10),
-            ('irds:msmarco-passage/trec-dl-2019/judged', nDCG@10),
-            ('irds:msmarco-passage/trec-dl-2020/judged', nDCG@10),
-        ]
-
+    sets = [ 'irds:msmarco-passage/dev/small', 'irds:msmarco-passage/dev/2',
+        'irds:msmarco-passage/trec-dl-2019/judged', 'irds:msmarco-passage/trec-dl-2020/judged',]
+    measures = [RR@10, RR@10, nDCG@10, nDCG@10,]
+    return sets,  measures
+        
 def save_file(df, save_file):
     if not os.path.exists(os.path.dirname(save_file)):
         os.makedirs(os.path.dirname(save_file))

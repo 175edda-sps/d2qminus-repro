@@ -3,4 +3,5 @@
 data/runs/lsr
 data/runs/main
 data/runs/rerank
+cache
 archive

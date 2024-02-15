@@ -202,6 +202,7 @@ def process(scored_file, save_file, buckets_dir, range_step):
     df_res= analyse_new_and_repeated_in_ranges(df=df_scored, save_file=save_file, logger=logger,
                                          buckets_dir=buckets_dir, range_step=range_step,)
     logger.info(f"Done analysis, and the results were saved to {save_file}")
+    logger.info(f"results = {df_res.to_string()}")
     return df_res
 
 

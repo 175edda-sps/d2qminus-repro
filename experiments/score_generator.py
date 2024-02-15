@@ -99,7 +99,7 @@ def main():
     logger = get_logger(log_file)
     logger.info(f"The log file is saved into : {log_file}")
     logger.info(f"The output file is saved into : {output}")
-    logger.info(f"The input file is saved into : {input}")
+    logger.info(f"The input file is : {input}")
     logger.info(f"Scoring documents is starting from row = {start}")
 
     process(input, output, logger, start)

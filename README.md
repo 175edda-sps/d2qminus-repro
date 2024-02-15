@@ -12,9 +12,6 @@ conda create --name doc2query  -c pytorch -c conda-forge -c nvidia python=3.8.17
 conda activate doc2query
 pip install -r requirements.txt
 pip install git+https://github.com/terrierteam/pyterrier_dr.git
-
-pip install git+https://github.com/terrierteam/pyterrier_doc2query.git
-pip install git+https://github.com/terrierteam/pyterrier_t5.git
 ```
 
 ## 1. Scoring Queries

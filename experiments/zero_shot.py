@@ -15,7 +15,6 @@ if not pt.started():
 def build_index(df_input=None, index_path=None,  logger=None):
     
     if not util.is_index_built(index_path):
-        logger.info(f"Done prepare_n80_for_indexing dataframe")
         logger.info(f"Building the index on this path : {index_path}")
         util.build_index(df_input, index_path)
         logger.info(f"Done Indexing")
@@ -30,7 +29,7 @@ def evaluate(index_path, logger, runs_dir, run_initial_name, eval_save_file, dat
                                 dataset=dataset, query_column=query_column, 
                                 qrels=qrels, queries=queries)
 
-    logger.info(df_res)
+    logger.info(df_res.to_string())
     return df_res
 
 
@@ -53,10 +52,9 @@ def index_evaluate(index_dir, eval_dir, runs_dir, dataset, pt_dataset_name, scor
                    percentages=[30, 50]):
     
     df_ans = pd.DataFrame()
-    dataset_eval_dir = f'{eval_dir}/{dataset}'
-    all_eval_file = f'{dataset_eval_dir}/all_evaluation.xlsx'
+    all_eval_file = f'{eval_dir}/all_evaluation.xlsx'
     exp_runs_dir = f'{runs_dir}/{dataset}'
-    log_file = f'{dataset_eval_dir}/index_evaluate.log'
+    log_file = f'{eval_dir}/index_evaluate.log'
 
     text_only_exp = 'text_only' # text only experiment
     d2q_exp = f'd2q_N{N}'
@@ -86,7 +84,7 @@ def index_evaluate(index_dir, eval_dir, runs_dir, dataset, pt_dataset_name, scor
 
     # 1. Evaluate text only
     df_res = evaluate(text_index, logger, exp_runs_dir, run_initial_name=text_only_exp, 
-                    eval_save_file=f'{dataset_eval_dir}/{text_only_exp}.csv', 
+                    eval_save_file=f'{eval_dir}/{text_only_exp}.csv', 
                     dataset=pt_dataset_name, query_column=query_column, qrels=qrels, queries=queries)
     
     df_res['experiment'] = [text_only_exp] * len(df_res)
@@ -94,7 +92,7 @@ def index_evaluate(index_dir, eval_dir, runs_dir, dataset, pt_dataset_name, scor
 
     # 2. Evaluate doc2query
     df_res = evaluate(d2q_index, logger, exp_runs_dir, run_initial_name=d2q_exp, 
-                    eval_save_file=f'{dataset_eval_dir}/{d2q_exp}.csv', 
+                    eval_save_file=f'{eval_dir}/{d2q_exp}.csv', 
                     dataset=pt_dataset_name, query_column=query_column, qrels=qrels, queries=queries)
     
     df_res['experiment'] = [d2q_exp] * len(df_res)
@@ -105,7 +103,7 @@ def index_evaluate(index_dir, eval_dir, runs_dir, dataset, pt_dataset_name, scor
         # compute the thresholds for  top X
         filter_name = f'd2q_N{N}_{filter_type}_{percentage}' # f (Filtered)
         filtered_index_path = f"{index_dir}/{dataset}_{filter_name}"
-        eval_file  = f'{dataset_eval_dir}/{filter_name}.csv'
+        eval_file  = f'{eval_dir}/{filter_name}.csv'
         df_res = evaluate(filtered_index_path, logger, exp_runs_dir, run_initial_name=filter_name, 
                         eval_save_file=eval_file, dataset=pt_dataset_name, query_column=query_column, 
                         qrels=qrels, queries=queries)

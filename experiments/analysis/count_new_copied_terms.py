@@ -80,6 +80,7 @@ def process(scored_file, save_file, filter_type, percentage,):
     df_res.to_excel(save_file, index=False)
 
     logger.info(f"Done counting, and the results were saved to {save_file}")
+    logger.info(df_res.to_string())
     return df_res
 
 
