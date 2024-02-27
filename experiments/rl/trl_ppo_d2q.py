@@ -3,6 +3,7 @@ from tqdm import tqdm
 import numpy as np
 from typing import List
 import warnings
+import argparse
 tqdm.pandas()
 
 from transformers import pipeline, AutoTokenizer, AutoModelForSequenceClassification, \
@@ -33,7 +34,7 @@ def expansion_reward(passage, query, analyzer):
     return len(expansion_words) / len(query_words)
 
 
-def build_dataset(config, dataset_name, max_length=256):
+def build_dataset(config, dataset_name, qrels_file, max_length=256):
     tokenizer = AutoTokenizer.from_pretrained(config.model_name, cache_dir='cache')
 
     def tokenize(sample):
@@ -48,7 +49,7 @@ def build_dataset(config, dataset_name, max_length=256):
 
     # filter out passages that are in qrels
     qrels = set()
-    with open('qrels.train.tsv') as f:
+    with open(qrels_file) as f:
         for line in f:
             qid, _, pid, _ = line.split()
             qrels.add(pid)
@@ -77,6 +78,11 @@ def main():
     ########################################################################
 
 
+    parser = argparse.ArgumentParser(description="Script to train DocT5Query model using Reinforcement learning")
+    parser.add_argument("--train_qrels", type=str, required=True, help="Path to the train qrels file")
+    args = parser.parse_args()
+    train_qrels = args.train_qrels
+
     # We first define the configuration of the experiment, defining the model, the dataset,
     # the training parameters, and the PPO parameters.
     # Check the default arguments in the `PPOConfig` class for more details.
@@ -86,11 +92,11 @@ def main():
         model_name='castorini/doc2query-t5-base-msmarco',
         # model_name='google/flan-t5-base',
         learning_rate=1e-5,
-        batch_size=128,
-        mini_batch_size=128,
+        batch_size=64,
+        mini_batch_size=64,
         log_with="wandb",
         tracker_project_name="DIL",
-        accelerator_kwargs={'mixed_precision': 'bf16'},
+        accelerator_kwargs={'mixed_precision': 'fp16'},
         seed=929,
         # use_score_scaling=True,
         # use_score_norm=True,
@@ -134,6 +140,8 @@ def main():
 
     dataset = build_dataset(config,
                             dataset_name='Tevatron/msmarco-passage-corpus',
+                            qrels_file=train_qrels,
+                            max_length=256
                             )['train']
 
     ppo_trainer = PPOTrainer(config, model, ref_model, tokenizer, dataset=dataset, data_collator=collator)
